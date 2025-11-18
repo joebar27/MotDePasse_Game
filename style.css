@@ -1,0 +1,262 @@
+:root {
+    --bg: #0b1220;
+    --panel: #0f1722;
+    --muted: #9aa6b2;
+    --text: #e6edf3;
+    --accent: #58a6ff;
+}
+* {
+    box-sizing: border-box;
+}
+body {
+    margin: 0;
+    height: 100vh;
+    background: var(--bg);
+    color: var(--text);
+    font-family: Inter, system-ui, Segoe UI, Roboto, Arial;
+}
+
+/* --------------------------------------
+   | Layout and general styles Desktops |
+   -------------------------------------- */
+
+#burgerDiv {
+    display: none;
+}
+
+
+    /* ? --------------------------------------
+       ? |        Header styles Mobiles       |
+       ? -------------------------------------- */
+    header {
+        display: flex;
+        flex-direction: column;
+        row-gap: 0px;
+        align-items: start;
+    }
+    .logoTitle {
+        display: flex;
+        flex-direction: row;
+        justify-content: space-around;
+        width: 100%;
+        align-items: center;
+        font-size: 18px;
+        line-height: 1.2;
+        font-weight: 600;
+        padding: 0;
+    }
+
+    /* ? --------------------------------------
+       ? |      Burger styles Mobiles         |
+       ? -------------------------------------- */
+    /* Le conteneur du burger */
+    #burgerDiv {
+        display: block;
+    }
+    #burger {
+        display: inline-block;
+        cursor: pointer;
+    }
+    .barBurger-1,
+    .barBurger-2,
+    .barBurger-3 {
+        width: 25px;
+        height: 3px;
+        border-radius: 5px;
+        background-color: var(--text);
+        margin: 4px 0;
+        transition: 0.4s;
+    }
+    #burger span {
+        display: block;
+        width: 25px;
+        height: 3px;
+        border-radius: 5px;
+        margin: 5px 0;
+        background: var(--text);
+        transition: 0.4s;
+    }
+    #burger-toggle:checked + #burger .barBurger-1 {
+        transform: rotate(-45deg) translate(-5px, 6px);
+    }
+    #burger-toggle:checked + #burger .barBurger-2 {
+        opacity: 0;
+    }
+    #burger-toggle:checked + #burger .barBurger-3 {
+        transform: rotate(45deg) translate(-5px, -6px);
+    }
+    #burger-toggle {
+        display: none;
+    }
+
+    /* ? --------------------------------------
+       ? |        Main styles Mobiles         |
+       ? -------------------------------------- */
+    main {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+    }
+
+    /* Les case a remplir */
+    .panel-mdp {
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        background: var(--panel);
+        max-width: 370px;
+        margin: 10px;
+        margin-top: 20px;
+        padding: 12px;
+        border-radius: 12px;
+        border: 1px solid #17212b;
+    }
+    .row {
+        display: flex;
+        flex-direction: row;
+        justify-content: center;
+    }
+    .case {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        width: 50px;
+        height: 50px;
+        margin: 2px;
+        background-color: #1c3142;
+        border-radius: 4px;
+    }
+    .case p {
+        font-size: 36px;
+        font-weight: bold;
+        color: var(--text);
+        text-align: center;
+    }
+    .case:hover {
+        background-color: #2a4a5e;
+    }
+
+    /* Le keyboard */
+    .keyboard {
+        display: flex;
+        position: absolute;
+        max-width: 100%;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        bottom: 20px;
+        left: 0;
+        width: 100%;
+    }
+    .row-keyboard {
+        display: flex;
+        justify-content: space-evenly;
+        width: calc(100% - 10px);
+    }
+    .key {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        width: calc(100% / 10);
+        height: 40px;
+        margin: 1px;
+        color: var(--text);
+        background-color: #1c3142;
+        border-radius: 4px;
+        cursor: pointer;
+    }
+    .btn-clear {
+        display: flex;
+        width: 100px;
+        height: 40px;
+        justify-content: space-around;
+        align-items: center;
+    }
+    .btn-clear img {
+        display: flex;
+        width: 20px;
+        height: 20px;
+    }
+
+    .btn-reveal {
+        display: flex;
+        width: 180px;
+        height: 40px;
+        justify-content: space-around;
+        align-items: center;
+    }
+    .btn-reveal img {
+        display: flex;
+        width: 32px;
+        height: 32px;
+    }
+
+    .btn-validate {
+        width: 80px;
+        height: 40px;
+    }
+    .correct {
+        background-color: #3b82f6 !important; /* bleu */
+    }
+
+    .present {
+        background-color: #facc15 !important; /* jaune */
+    }
+
+    .absent {
+        background-color: #6b7280 !important; /* gris */
+    }
+
+
+    /* ! ----------------------------------------
+   ! ----------------------------------------
+   ! |||| Media Query for mobile devices ||||
+   ! ----------------------------------------
+   ! ---------------------------------------- */
+@media (min-width: 1000px) {
+    .case {
+        width: 60px;
+        height: 60px;
+        margin: 4px;
+        border-radius: 5px;
+    }
+    .case p {
+        font-size: 42px;
+    }
+    .keyboard {
+        max-width: 50%;
+        left: 25%;
+    }
+    .row-keyboard {
+        width: calc(100% - 10px);
+    }
+    .key {
+        width: calc((100% / 10) - 10px);
+        height: 50px;
+        font-size: 32px;
+        border-radius: 4px;
+    }
+    .btn-clear {
+        width: 120px;
+        height: 50px;
+        font-size: 16px;
+    }
+    .btn-clear img {
+        width: 28px;
+        height: 28px;
+    }
+    .btn-reveal {
+        width: 200px;
+        height: 50px;
+        font-size: 16px;
+    }
+    .btn-reveal img {
+        width: 32px;
+        height: 32px;
+    }
+    .btn-validate {
+        width: 100px;
+        font-size: 18px;
+        height: 50px;
+    }
+}

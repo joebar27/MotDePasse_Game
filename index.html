@@ -1,0 +1,78 @@
+<!doctype html>
+<html lang="fr">
+
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Mot De Passe</title>
+    <meta name="description"
+        content="Jeu dans lequel il faut trouvé un mot en un minimum de coup avec differente variante de difficulté" />
+    <meta name="author" content="ANGER Romain" />
+    <meta name="keywords" content="jeu, mot, lettre, reflexion" />
+    <link rel="icon" href="Assets/Img/logo.png" />
+    <link rel="stylesheet" href="style.css" />
+</head>
+
+<body>
+    <header>
+        <div class="logoTitle">
+            <img src="Assets/Img/logo.png" alt="Logo MdP" height="32" />
+            <h3>Mot de passe</h3>
+            <div id="burgerDiv">
+                <input type="checkbox" id="burger-toggle">
+                <label id="burger" for="burger-toggle">
+                    <span class="barBurger-1"></span>
+                    <span class="barBurger-2"></span>
+                    <span class="barBurger-3"></span>
+                </label>
+            </div>
+        </div>
+    </header>
+
+    <main>
+        <div class="panel-mdp"></div>
+        
+        <div class="keyboard">
+            <div class="row-keyboard">
+                <button class="key" data-key="A">A</button>
+                <button class="key" data-key="Z">Z</button>
+                <button class="key" data-key="E">E</button>
+                <button class="key" data-key="R">R</button>
+                <button class="key" data-key="T">T</button>
+                <button class="key" data-key="Y">Y</button>
+                <button class="key" data-key="U">U</button>
+                <button class="key" data-key="I">I</button>
+                <button class="key" data-key="O">O</button>
+                <button class="key" data-key="P">P</button>
+            </div>
+            <div class="row-keyboard">
+                <button class="key" data-key="Q">Q</button>
+                <button class="key" data-key="S">S</button>
+                <button class="key" data-key="D">D</button>
+                <button class="key" data-key="F">F</button>
+                <button class="key" data-key="G">G</button>
+                <button class="key" data-key="H">H</button>
+                <button class="key" data-key="J">J</button>
+                <button class="key" data-key="K">K</button>
+                <button class="key" data-key="L">L</button>
+                <button class="key" data-key="M">M</button>
+            </div>
+            <div class="row-keyboard">
+                <button class="key" data-key="W">W</button>
+                <button class="key" data-key="X">X</button>
+                <button class="key" data-key="C">C</button>
+                <button class="key" data-key="V">V</button>
+                <button class="key" data-key="B">B</button>
+                <button class="key" data-key="N">N</button>
+                <button id="key-btn-clear" class="key btn-clear" data-key="DEL"><img src="Assets/Img/clear.png" alt="logo clear">Effacer</button>
+            </div>
+            <div class="row-keyboard">
+                <button id="key-btn-reveal" class="key btn-reveal"><img src="Assets/Img/reveal.png" alt="logo reveal">Révéler une lettre</button>
+                <button id="key-btn-validate" class="key btn-validate" data-key="ENTER">Valider</button>
+            </div>
+        </div>
+    </main>
+    <script type="module" src="script.js"></script>
+</body>
+
+</html>
