@@ -1,154 +1,5 @@
-// let listeMots = {};
-// let motSecret = "";
-// let TAILLE_MOT = 0;
-// const NOMBRE_ESSAIS = 5;
-
-// let ligneActuelle = 0;
-// let indexLettre = 0;
-
-// // -------------------------------
-// // INITIALISATION
-// // -------------------------------
-// async function init() {
-
-//     // Charge ton fichier JSON
-//     const res = await fetch("Assets/Dictionnaires/dicoParTaille.json");
-//     listeMots = await res.json();
-
-//     // Choisir une longueur de mot (par exemple : 6)
-//     TAILLE_MOT = 6;
-
-//     // Sélection du mot secret
-//     const motsValides = listeMots[TAILLE_MOT];
-//     motSecret = motsValides[Math.floor(Math.random() * motsValides.length)].toUpperCase();
-
-//     // Génère la grille
-//     creerGrille();
-
-//     console.log("Mot secret :", motSecret); // Pour tester
-// }
-
-// init();
-
-// // -------------------------------
-// // CREATION DE LA GRILLE
-// // -------------------------------
-// function creerGrille() {
-//     const section = document.querySelector(".panel-mdp");
-//     section.innerHTML = "";
-
-//     for (let r = 0; r < NOMBRE_ESSAIS; r++) {
-//         const row = document.createElement("div");
-//         row.classList.add("row");
-//         row.id = `row-${r}`;
-
-//         for (let c = 0; c < TAILLE_MOT; c++) {
-//             const cell = document.createElement("div");
-//             cell.classList.add("case");
-//             cell.innerHTML = `<p class="letter"></p>`;
-//             row.appendChild(cell);
-//         }
-//         section.appendChild(row);
-//     }
-// }
-
-// // -------------------------------
-// // GESTION DU CLAVIER
-// // -------------------------------
-// document.querySelectorAll(".key").forEach(btn => {
-//     const letter = btn.textContent.trim();
-//     if (/^[A-Z]$/.test(letter)) {
-//         btn.addEventListener("click", () => ajouterLettre(letter));
-//     }
-// });
-
-// document.getElementById("key-btn-clear").addEventListener("click", effacerLettre);
-// document.getElementById("key-btn-validate").addEventListener("click", validerMot);
-
-// // -------------------------------
-// // SAISIE DES LETTRES
-// // -------------------------------
-// function ajouterLettre(lettre) {
-//     if (indexLettre >= TAILLE_MOT) return;
-
-//     const cell = document.querySelector(`#row-${ligneActuelle} .case:nth-child(${indexLettre + 1}) .letter`);
-//     cell.textContent = lettre;
-//     indexLettre++;
-// }
-
-// function effacerLettre() {
-//     if (indexLettre === 0) return;
-
-//     indexLettre--;
-//     const cell = document.querySelector(`#row-${ligneActuelle} .case:nth-child(${indexLettre + 1}) .letter`);
-//     cell.textContent = "";
-// }
-
-// // -------------------------------
-// // VALIDATION DU MOT
-// // -------------------------------
-// function validerMot() {
-//     if (indexLettre < TAILLE_MOT) return;
-
-//     const ligne = Array.from(document.querySelectorAll(`#row-${ligneActuelle} .letter`)).map(el => el.textContent).join("");
-
-//     if (!listeMots[TAILLE_MOT].includes(ligne.toLowerCase())) {
-//         alert("Mot inconnu !");
-//         return;
-//     }
-
-//     colorerLigne(ligne);
-
-//     if (ligne === motSecret) {
-//         alert("Gagné !");
-//         return;
-//     }
-
-//     ligneActuelle++;
-//     indexLettre = 0;
-
-//     if (ligneActuelle >= NOMBRE_ESSAIS) {
-//         alert(`Perdu ! Le mot était : ${motSecret}`);
-//     }
-// }
-
-// // -------------------------------
-// // COLORATION DES CASES
-// // -------------------------------
-// function colorerLigne(motJoueur) {
-//     const cases = document.querySelectorAll(`#row-${ligneActuelle} .case`);
-//     const lettresRestantes = motSecret.split("");
-
-//     // 1. Lettres bien placées
-//     motJoueur.split("").forEach((lettre, i) => {
-//         if (lettre === motSecret[i]) {
-//             cases[i].classList.add("correct");
-//             lettresRestantes[i] = null;
-//         }
-//     });
-
-//     // 2. Lettres mal placées / absentes
-//     motJoueur.split("").forEach((lettre, i) => {
-//         if (cases[i].classList.contains("correct")) return;
-
-//         if (lettresRestantes.includes(lettre)) {
-//             cases[i].classList.add("present");
-//             lettresRestantes[lettresRestantes.indexOf(lettre)] = null;
-//         } else {
-//             cases[i].classList.add("absent");
-//         }
-//     });
-// }
-
-
-
-
-
-
-
-// Revised version of script.js
-const TAILLE_MOT = 5;
-const NOMBRE_ESSAIS = 6;
+const TAILLE_MOT = 6;
+const NOMBRE_ESSAIS = 7;
 
 let motSecret = "";
 let ligneActuelle = 0;
@@ -156,9 +7,17 @@ let positionLettre = 0;
 let listeMots = {};
 
 function normaliser(texte) {
-    return texte.normalize("NFD")
-                .replace(/[\u0300-\u036f]/g, "")
-                .toUpperCase();
+    return texte
+        .normalize("NFD")
+        .replace(/[\u0300-\u036f]/g, "")
+        .toUpperCase();
+}
+
+function mettreEnSurbrillanceCurseur() {
+    const ligne = document.querySelectorAll(`#row-${ligneActuelle} .case`);
+    ligne.forEach((c, i) => c.classList.remove("focus"));
+
+    ligne[positionLettre].classList.add("focus");
 }
 
 async function chargerMots() {
@@ -184,31 +43,53 @@ function creerGrille() {
             const cell = document.createElement("div");
             cell.classList.add("case");
             cell.innerHTML = `<p class="letter"></p>`;
+
+            // Permet de cliquer sur une case du mot en cours
+            cell.addEventListener("click", () => {
+                if (r === ligneActuelle) {
+                    positionLettre = c;
+                    mettreEnSurbrillanceCurseur();
+                }
+            });
+
             row.appendChild(cell);
         }
 
         section.appendChild(row);
     }
+    mettreEnSurbrillanceCurseur();
 }
 
 function ajouterLettre(l) {
     if (positionLettre >= TAILLE_MOT) return;
-
+    console.log("Ajout de la lettre pos :", positionLettre);
     const cellule = document.querySelector(
         `#row-${ligneActuelle} .case:nth-child(${positionLettre + 1}) .letter`
     );
     cellule.textContent = l.toUpperCase();
     positionLettre++;
+    if (positionLettre < TAILLE_MOT) mettreEnSurbrillanceCurseur();
 }
 
 function supprimerLettre() {
-    if (positionLettre <= 0) return;
-    positionLettre--;
+    console.log("Suppression de la lettre pos :", positionLettre);
+    const cellule = document.querySelector(`#row-${ligneActuelle} .case:nth-child(${positionLettre + 1}) .letter`);
+    
+    if (positionLettre <= 0) {
+        cellule.textContent = ""; 
+        return;
+    }
 
-    const cellule = document.querySelector(
-        `#row-${ligneActuelle} .case:nth-child(${positionLettre + 1}) .letter`
-    );
-    cellule.textContent = "";
+    console.log(cellule.textContent);
+
+    if (cellule.textContent === "") {
+            positionLettre--;
+            cellule.textContent = "";
+        }
+        else{
+            cellule.textContent = "";
+    }
+    mettreEnSurbrillanceCurseur();
 }
 
 function shakeLigne() {
@@ -218,16 +99,26 @@ function shakeLigne() {
 }
 
 function validerMot() {
+    console.log("Validation du mot");
+    console.log("Position lettre :", positionLettre);
+    console.log("Taille_mot :", TAILLE_MOT);
+
     if (positionLettre < TAILLE_MOT) {
+        console.log("Mot incomplet");
         shakeLigne();
         return;
     }
 
     const cases = document.querySelectorAll(`#row-${ligneActuelle} .letter`);
-    const motJoueur = Array.from(cases).map(c => c.textContent).join("");
+    const motJoueur = Array.from(cases)
+        .map((c) => c.textContent)
+        .join("");
 
     const motNormalise = normaliser(motJoueur);
-    const listeNormalisee = listeMots[TAILLE_MOT].map(m => normaliser(m));
+    const listeNormalisee = listeMots[TAILLE_MOT].map((m) => normaliser(m));
+
+    console.log("Mot joueur :", normaliser(motJoueur));
+    console.log("Mot secret :", normaliser(motSecret));
 
     if (!listeNormalisee.includes(motNormalise)) {
         shakeLigne();
@@ -237,12 +128,13 @@ function validerMot() {
     colorerLigne(motJoueur);
 
     if (normaliser(motJoueur) === normaliser(motSecret)) {
-        setTimeout(() => alert("Bravo !"), 300);
+        setTimeout(() => alert("Bravo !"), 1000);
         return;
     }
 
     ligneActuelle++;
     positionLettre = 0;
+    mettreEnSurbrillanceCurseur();
 
     if (ligneActuelle === NOMBRE_ESSAIS) {
         setTimeout(() => alert(`Perdu ! Le mot était : ${motSecret}`), 300);
@@ -266,7 +158,7 @@ function colorerLigne(motJoueur) {
         if (cases[i].classList.contains("correct")) continue;
 
         const index = lettresRestantes.findIndex(
-            l => l && normaliser(l) === normaliser(motJoueur[i])
+            (l) => l && normaliser(l) === normaliser(motJoueur[i])
         );
 
         if (index !== -1) {
@@ -279,10 +171,10 @@ function colorerLigne(motJoueur) {
 }
 
 function setupClavier() {
-    document.querySelectorAll(".key").forEach(key => {
+    document.querySelectorAll(".key").forEach((key) => {
         key.addEventListener("click", () => {
             const val = key.dataset.key;
-
+            console.log("Touche appuyée :", val);
             if (val === "ENTER") validerMot();
             else if (val === "DEL") supprimerLettre();
             else ajouterLettre(val);
