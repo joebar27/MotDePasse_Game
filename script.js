@@ -98,21 +98,19 @@ function shakeLigne() {
 }
 
 function validerMot() {
-    console.log("Validation du mot");
-    console.log("Position lettre :", positionLettre);
-    console.log("Taille_mot :", TAILLE_MOT);
-
-    if (positionLettre < TAILLE_MOT) {
-        console.log("Mot incomplet");
-        shakeLigne();
-        return;
-    }
 
     const cases = document.querySelectorAll(`#row-${ligneActuelle} .letter`);
+    console.log("Cases :", cases);
     const motJoueur = Array.from(cases)
         .map((c) => c.textContent)
         .join("");
 
+    if (motJoueur < TAILLE_MOT) {
+            console.log("Mot incomplet");
+            shakeLigne();
+            return;
+        }
+        
     const motNormalise = normaliser(motJoueur);
     const listeNormalisee = listeMots[`${TAILLE_MOT}_lettres`].map((m) => normaliser(m));
 
