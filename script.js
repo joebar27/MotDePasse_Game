@@ -21,10 +21,9 @@ function mettreEnSurbrillanceCurseur() {
 }
 
 async function chargerMots() {
-    const r = await fetch("Assets/Dictionnaires/dicoParTaille.json");
+    const r = await fetch("Assets/Dictionnaires/mots_filtrés_sans_doublons.json");
     listeMots = await r.json();
-
-    const mots = listeMots[TAILLE_MOT];
+    const mots = listeMots[`${TAILLE_MOT}_lettres`];
     motSecret = mots[Math.floor(Math.random() * mots.length)].toUpperCase();
 
     console.log("Mot secret :", motSecret);
@@ -115,7 +114,7 @@ function validerMot() {
         .join("");
 
     const motNormalise = normaliser(motJoueur);
-    const listeNormalisee = listeMots[TAILLE_MOT].map((m) => normaliser(m));
+    const listeNormalisee = listeMots[`${TAILLE_MOT}_lettres`].map((m) => normaliser(m));
 
     console.log("Mot joueur :", normaliser(motJoueur));
     console.log("Mot secret :", normaliser(motSecret));
