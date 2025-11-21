@@ -1,3 +1,7 @@
+/*  ? --------------------------------------
+    ? |        Générale styles             |
+    ? ----------------------------------- */
+
 :root {
     --bg: #0b1220;
     --panel: #0f1722;
@@ -16,17 +20,10 @@ body {
     font-family: Inter, system-ui, Segoe UI, Roboto, Arial;
 }
 
-/* --------------------------------------
-   | Layout and general styles Desktops |
-   -------------------------------------- */
+/*  ? --------------------------------------
+    ? |        Header styles Mobiles       |
+    ? ----------------------------------- */
 
-#burgerDiv {
-    display: none;
-}
-
-/* ? --------------------------------------
-       ? |        Header styles Mobiles       |
-       ? -------------------------------------- */
 header {
     display: flex;
     flex-direction: column;
@@ -49,6 +46,34 @@ header {
        ? |      Burger styles Mobiles         |
        ? -------------------------------------- */
 /* Le conteneur du burger */
+#menu {
+    background-color: #222;
+    color: white;
+    padding: 12px;
+    display: none;
+    position: absolute;
+    top: 60px;
+    right: 10px;
+    border-radius: 10px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+    z-index: 100;
+}
+
+.menu-content {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+#menu label {
+    font-size: 14px;
+}
+
+#menu select,
+#menu input[type="checkbox"] {
+    transform: scale(1.1);
+}
+
 #burgerDiv {
     display: block;
 }
@@ -56,38 +81,27 @@ header {
     display: inline-block;
     cursor: pointer;
 }
-.barBurger-1,
-.barBurger-2,
-.barBurger-3 {
-    width: 25px;
-    height: 3px;
-    border-radius: 5px;
-    background-color: var(--text);
-    margin: 4px 0;
-    transition: 0.4s;
-}
 #burger span {
     display: block;
     width: 25px;
     height: 3px;
-    border-radius: 5px;
     margin: 5px 0;
-    background: var(--text);
+    border-radius: 5px;
+    background-color: var(--text);
     transition: 0.4s;
 }
-#burger-toggle:checked + #burger .barBurger-1 {
+#burgerInput:checked + #burger .barBurger-1 {
     transform: rotate(-45deg) translate(-5px, 6px);
 }
-#burger-toggle:checked + #burger .barBurger-2 {
+#burgerInput:checked + #burger .barBurger-2 {
     opacity: 0;
 }
-#burger-toggle:checked + #burger .barBurger-3 {
+#burgerInput:checked + #burger .barBurger-3 {
     transform: rotate(45deg) translate(-5px, -6px);
 }
-#burger-toggle {
-    display: none;
-}
-
+#burgerInput {
+        display: none;
+    }
 /* ? --------------------------------------
        ? |        Main styles Mobiles         |
        ? -------------------------------------- */
@@ -211,12 +225,38 @@ main {
     border-radius: 4px;
 }
 
+/* Animations */
+@keyframes shake {
+    10%,
+    90% {
+        transform: translateX(-2px);
+    }
+    20%,
+    80% {
+        transform: translateX(4px);
+    }
+    30%,
+    50%,
+    70% {
+        transform: translateX(-6px);
+    }
+    40%,
+    60% {
+        transform: translateX(6px);
+    }
+}
+
+.shake {
+    animation: shake 0.4s;
+}
+
 /* ! ----------------------------------------
    ! ----------------------------------------
-   ! |||| Media Query for mobile devices ||||
+   ! |||| Media Query for desktop devices ||||
    ! ----------------------------------------
    ! ---------------------------------------- */
 @media (min-width: 1000px) {
+    
     .case {
         width: 60px;
         height: 60px;

@@ -19,19 +19,37 @@
             <img src="Assets/Img/logo.png" alt="Logo MdP" height="32" />
             <h3>Mot de passe</h3>
             <div id="burgerDiv">
-                <input type="checkbox" id="burger-toggle">
-                <label id="burger" for="burger-toggle">
+                <input type="checkbox" id="burgerInput">
+                <label id="burger" for="burgerInput">
                     <span class="barBurger-1"></span>
                     <span class="barBurger-2"></span>
                     <span class="barBurger-3"></span>
                 </label>
             </div>
         </div>
+        <nav id="menu">
+            <div class="menu-content">
+                <label for="letters">Nombre de lettres :</label>
+                <select id="letters">
+                    <option value="5">5 lettres</option>
+                    <option value="6">6 lettres</option>
+                </select>
+                <label for="essais">Nombre d'essais :</label>
+                <select id="essais">
+                    <option value="5">5</option>
+                    <option value="6">6</option>
+                    <option value="7">7</option>
+                    <option value="8">8</option>
+                </select>
+                
+                <label for="cheat">Mode triche :</label>
+                <input type="checkbox" id="cheat" />
+            </div>
+        </nav>
     </header>
-
     <main>
         <div class="panel-mdp"></div>
-        
+
         <div class="keyboard">
             <div class="row-keyboard">
                 <button class="key" data-key="A">A</button>
@@ -64,10 +82,12 @@
                 <button class="key" data-key="V">V</button>
                 <button class="key" data-key="B">B</button>
                 <button class="key" data-key="N">N</button>
-                <button id="key-btn-clear" class="key btn-clear" data-key="DEL"><img src="Assets/Img/clear.png" alt="logo clear">Effacer</button>
+                <button id="key-btn-clear" class="key btn-clear" data-key="DEL"><img src="Assets/Img/clear.png"
+                        alt="logo clear">Effacer</button>
             </div>
             <div class="row-keyboard">
-                <button id="key-btn-reveal" class="key btn-reveal"><img src="Assets/Img/reveal.png" alt="logo reveal">Révéler une lettre</button>
+                <button id="key-btn-reveal" class="key btn-reveal"><img src="Assets/Img/reveal.png"
+                        alt="logo reveal">Révéler une lettre</button>
                 <button id="key-btn-validate" class="key btn-validate" data-key="ENTER">Valider</button>
             </div>
         </div>
