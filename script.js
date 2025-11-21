@@ -80,7 +80,7 @@ function normaliser(texte) {
 function mettreEnSurbrillanceCurseur() {
     const ligne = document.querySelectorAll(`#row-${ligneActuelle} .case`);
     ligne.forEach((c, i) => c.classList.remove("focus"));
-    if (positionLettre < tailleMot) {
+    if (positionLettre < tailleMot && ligneActuelle < nombreEssais) {
         ligne[positionLettre].classList.add("focus");
     }
 }
@@ -235,6 +235,7 @@ function validerMot() {
     mettreEnSurbrillanceCurseur();
     // Vérifie si le joueur a épuisé tous ses essais
     if (ligneActuelle === nombreEssais) {
+
         setTimeout(() => alert(`Perdu ! Le mot était : ${motSecret}`), 300);
     }
 }
