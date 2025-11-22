@@ -11,11 +11,9 @@ function menuBurger() {
     const burgerInput = document.getElementById("burgerInput");
     const burgerLabel = document.getElementById("burger");
     const menu = document.getElementById("menu");
-    // Ouvrir / fermer via le burger
     burgerInput.addEventListener("change", () => {
         menu.style.display = burgerInput.checked ? "block" : "none";
     });
-    // Fermer si clic à l'extérieur
     document.addEventListener("mousedown", (e) => {
         // Si le clic vient du LABEL → NE PAS fermer !
         if (burgerLabel.contains(e.target)) {
@@ -61,6 +59,26 @@ function menuBurger() {
                 : "Désactivé"
         );
         triche = cheatToggle.checked;
+        showMotSecret(triche);
+    });
+}
+
+function showMotSecret(triche) {
+    const mdpDisplay = document.getElementById("mdp");
+    const confMdpSpan = document.getElementById("confirmMdP");
+    const mdpWordSpan = document.getElementById("mdpWord");
+    triche ? mdpDisplay.style.display = "flex" : mdpDisplay.style.display = "none";
+    triche ? confMdpSpan.style.display = "block" : confMdpSpan.style.display = "none";
+    document.addEventListener("mousedown", (e) => {
+        if (confMdpSpan.contains(e.target)) {
+            confMdpSpan.style.display = "none";
+            mdpWordSpan.style.display = "block";
+            mdpWordSpan.textContent = `Mot secret : ${motSecret}`;
+        }
+        if (!confMdpSpan.contains(e.target)) {
+            confMdpSpan.style.display = "block";
+            mdpWordSpan.style.display = "none";
+        }
     });
 }
 
@@ -68,6 +86,7 @@ function gameInit() {
     chargerMots();
     creerGrille();
     setupClavier();
+    showMotSecret(triche);
 }
 
 function normaliser(texte) {

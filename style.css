@@ -25,23 +25,55 @@ body {
     ? ----------------------------------- */
 
 header {
+    display: grid;
+    grid-template-areas:
+    "logo title burger"
+    "mdp mdp mdp";
+    grid-template-rows: auto auto;
+    grid-template-columns: 1fr 1fr 1fr;
+    /* align-items: start; */
+}
+.logoImg {
+    grid-area: logo;
     display: flex;
-    flex-direction: column;
-    row-gap: 0px;
-    align-items: start;
+    justify-content: center;
+    margin-top: 5px;
 }
 .logoTitle {
+    grid-area: title;
     display: flex;
-    flex-direction: row;
-    justify-content: space-around;
     width: 100%;
+    justify-content: center;
     align-items: center;
     font-size: 18px;
     line-height: 1.2;
     font-weight: 600;
     padding: 0;
+    margin: 0;
 }
-
+#mdp {
+    grid-area: mdp;
+    display: none;
+    margin-top: 5px;
+    font-size: 14px;
+    font-weight: 400;
+    justify-content: center;
+    align-items: center;
+}
+#confirmMdP {
+    display: none;
+    margin: 0 5px;
+    color: #3b82f6;
+}
+#mdpWord {
+    display: none;
+    margin: 0 5px;
+    color: #ef4444;
+}
+.attention {
+    color: #fbbf24;
+    font-size: 20px;
+}
 /* ? --------------------------------------
        ? |      Burger styles Mobiles         |
        ? -------------------------------------- */
@@ -75,7 +107,11 @@ header {
 }
 
 #burgerDiv {
-    display: block;
+    grid-area: burger;
+    display: flex;
+    justify-content: end;
+    align-items: center;
+    padding-right: 15px;
 }
 #burger {
     display: inline-block;
@@ -119,7 +155,7 @@ main {
     background: var(--panel);
     max-width: 370px;
     margin: 10px;
-    margin-top: 20px;
+    margin-top: 10px;
     padding: 12px;
     border-radius: 12px;
     border: 1px solid #17212b;
