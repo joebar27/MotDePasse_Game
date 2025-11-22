@@ -33,7 +33,7 @@ function menuBurger() {
     const attemptsSelect = document.getElementById("essais");
     //! Nombre de lettres
     lettersSelect.addEventListener("change", () => {
-        console.log("Nombre de lettres :", lettersSelect.value);
+        // console.log("Nombre de lettres :", lettersSelect.value);
         tailleMot = parseInt(lettersSelect.value);
         nombreEssais = parseInt(attemptsSelect.value);
         ligneActuelle = 0;
@@ -42,7 +42,7 @@ function menuBurger() {
     });
     //! Nombre d'essais
     attemptsSelect.addEventListener("change", () => {
-        console.log("Nombre d'essais :", attemptsSelect.value);
+        // console.log("Nombre d'essais :", attemptsSelect.value);
         nombreEssais = parseInt(attemptsSelect.value);
         tailleMot = parseInt(lettersSelect.value);
         ligneActuelle = 0;
@@ -52,12 +52,12 @@ function menuBurger() {
     //! Mode triche
     const cheatToggle = document.getElementById("cheat");
     cheatToggle.addEventListener("change", () => {
-        console.log(
-            "Mode triche",
-            cheatToggle.checked
-                ? `Activé \nMot secret : ${motSecret}`
-                : "Désactivé"
-        );
+        // console.log(
+        //     "Mode triche",
+        //     cheatToggle.checked
+        //         ? `Activé \nMot secret : ${motSecret}`
+        //         : "Désactivé"
+        // );
         triche = cheatToggle.checked;
         showMotSecret(triche);
     });
@@ -83,8 +83,13 @@ function showMotSecret(triche) {
 }
 
 function gameInit() {
+    ligneActuelle = 0;
+    positionLettre = 0;
     chargerMots();
     creerGrille();
+    ligneActuelle = 0;
+    positionLettre = 0;
+    mettreEnSurbrillanceCurseur();
     setupClavier();
     showMotSecret(triche);
 }
@@ -112,9 +117,9 @@ async function chargerMots() {
     const mots = listeMots[`${tailleMot}_lettres`];
     motSecret = mots[Math.floor(Math.random() * mots.length)].toUpperCase();
 
-    if (triche) {
-        console.log("Mot secret :", motSecret);
-    }
+    // if (triche) {
+    //     console.log("Mot secret :", motSecret);
+    // }
 }
 
 function creerGrille() {
@@ -245,7 +250,8 @@ function validerMot() {
     colorerLigne(motJoueur);
     // Vérifie si le mot est correct
     if (normaliser(motJoueur) === normaliser(motSecret)) {
-        setTimeout(() => alert("Bravo !"), 1000);
+        setTimeout(() => alert(`Bravo ! Le mot était : ${motSecret}`), 300);
+        setTimeout(() => gameInit(), 1000);
         return;
     }
     mettreEnSurbrillanceCurseur();
@@ -254,51 +260,90 @@ function validerMot() {
     mettreEnSurbrillanceCurseur();
     // Vérifie si le joueur a épuisé tous ses essais
     if (ligneActuelle === nombreEssais) {
-
         setTimeout(() => alert(`Perdu ! Le mot était : ${motSecret}`), 300);
+        setTimeout(() => gameInit(), 1000);
+        
     }
 }
 
 function colorerLigne(motJoueur) {
     const cases = document.querySelectorAll(`#row-${ligneActuelle} .case`);
     const lettresRestantes = motSecret.split("");
+    const guess = motJoueur.split("");
 
-    // Correct (vert)
+    // Table pour stocker les couleurs de la ligne actuelle
+    const colors = Array(tailleMot).fill("absent");
+
+    // 1️⃣ Correct (vert)
     for (let i = 0; i < tailleMot; i++) {
-        if (normaliser(motJoueur[i]) === normaliser(motSecret[i])) {
-            cases[i].classList.add("correct");
+        if (normaliser(guess[i]) === normaliser(motSecret[i])) {
+            colors[i] = "correct";
             lettresRestantes[i] = null;
         }
     }
 
-    // Present / absent
+    // 2️⃣ Present / Absent
     for (let i = 0; i < tailleMot; i++) {
-        if (cases[i].classList.contains("correct")) continue;
+
+        if (colors[i] === "correct") continue;
 
         const index = lettresRestantes.findIndex(
-            (l) => l && normaliser(l) === normaliser(motJoueur[i])
+            (l) => l && normaliser(l) === normaliser(guess[i])
         );
 
         if (index !== -1) {
-            cases[i].classList.add("present");
+            colors[i] = "present";
             lettresRestantes[index] = null;
         } else {
-            cases[i].classList.add("absent");
+            colors[i] = "absent";
+        }
+    }
+
+    // 3️⃣ Application des couleurs + mise à jour clavier
+    for (let i = 0; i < tailleMot; i++) {
+
+        const caseEl = cases[i];
+        const lettre = guess[i].toUpperCase();
+        const key = document.querySelector(`.key[data-key="${lettre}"]`);
+
+        caseEl.classList.add(colors[i]);
+
+        if (!key) continue;
+
+        if (colors[i] === "correct") {
+            key.classList.remove("present", "absent");
+            key.classList.add("correct");
+            key.disabled = false;
+        }
+        else if (colors[i] === "present") {
+            if (!key.classList.contains("correct")) {
+                key.classList.remove("absent");
+                key.classList.add("present");
+            }
+            key.disabled = false;
+        }
+        else if (colors[i] === "absent") {
+
+            // ⚠️ On vérifie si cette lettre apparaît ailleurs comme correct/present
+            const stillUseful = colors.some(
+                (c, idx) => guess[idx].toUpperCase() === lettre && (c === "correct" || c === "present")
+            );
+
+            if (!stillUseful) {
+                key.classList.add("absent");
+                key.disabled = true;
+            }
         }
     }
 }
 
 function setupClavier() {
-    // document.querySelectorAll(".key").forEach((key) => {
-    //     key.addEventListener("click", () => {
-    //         const val = key.dataset.key;
-    //         if (val === "ENTER") validerMot();
-    //         else if (val === "DEL") supprimerLettre(positionLettre);
-    //         else ajouterLettre(val);
-    //     });
-    // });
     document.querySelectorAll(".key").forEach((key) => {
         
+        // 🔄 Reset complet des classes et du disabled
+        key.classList.remove("correct", "present", "absent");
+        key.disabled = false;
+
         // 1️⃣ Retirer les anciens listeners (méthode simple : remplacer le bouton par son clone)
         const newKey = key.cloneNode(true);
         key.parentNode.replaceChild(newKey, key);
