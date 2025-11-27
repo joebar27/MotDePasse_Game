@@ -1,5 +1,8 @@
+const _URLLISTEMOTS_ = "Assets/Dictionnaires/mots_filtrés_sans_doublons.json";
+
 let tailleMot = 5; // Modifier cette valeur pour changer la taille du mot à deviner (entre 5 et 6)
-let nombreEssais = 6; // Modifier cette valeur pour changer le nombre d'essais (entre 5 et 7)
+let nombreEssais = 5; // Modifier cette valeur pour changer le nombre d'essais (entre 5 et 7)
+let dificulte ; // "facile = false", "difficile = true"
 let triche = false; // Mettre à true pour afficher le mot secret dans la console
 let indexMotSecret = 0;
 let motSecret = "";
@@ -51,6 +54,46 @@ function menuBurger() {
         positionLettre = 0;
         gameInit();
     });
+    //! Difficulté
+    const difficulteSelect = document.getElementById("difficile");
+    console.log("Difficulté initiale :", difficulteSelect.value);
+    difficulteSelect.addEventListener("change", () => {
+        let message = "";
+        let query = false;
+        if (ligneActuelle === 0) {
+            if (query) return;
+            if (difficulteSelect.value === "true" && !query) {
+                message = "Attention le mode DIFFICILE va etre activé :\n Les lettres absentes seront désactivées sur le clavier.\n\n Vous ne pourrez plus changer cette option dans vos prochains essais jusqu'à la fin de la partie.";
+                if (confirm(message)) {
+                    console.log("Mode difficile activé");
+                    dificulte = true;
+                } else {
+                    // Revenir à l'option précédente si l'utilisateur annule
+                    difficulteSelect.value = "false";
+                    dificulte = false;
+                    query = true;
+                    console.log("Mode difficile annulé");
+                }
+            }
+            if (difficulteSelect.value === "false" && !query) {
+                message = "Attention le mode FACILE va etre activé :\n Les lettres absentes seront PAS désactivées sur le clavier. Vous ne pourrez plus changer cette option dans vos prochains essais jusqu'à la fin de la partie.";
+                if (confirm(message)) {
+                    console.log("Mode facile activé");
+                    dificulte = false;
+                } else {
+                    // Revenir à l'option précédente si l'utilisateur annule
+                    difficulteSelect.value = "true";
+                    dificulte = true;
+                    query = true;
+                    console.log("Mode facile annulé");
+                }
+            }
+        // const dificulte = document.getElementById("difficile").value === "true" ? true : false;
+        } else {
+            alert("Vous ne pouvez pas changer la difficulté en cours de partie !");
+            difficulteSelect.value = dificulte ? "true" : "false";
+        }
+    });
     //! Mode triche
     const cheatToggle = document.getElementById("cheat");
     cheatToggle.addEventListener("change", () => {
@@ -97,7 +140,6 @@ function gameInit() {
 }
 
 function normaliser(texte) {
-    console.log("Normalisation de :", texte);
     return texte
         .normalize("NFD") // Décompose les caractères accentués
         .replace(/[\u0300-\u036f]/g, "") // Supprime les accents
@@ -113,9 +155,7 @@ function mettreEnSurbrillanceCurseur() {
 }
 
 async function chargerMots() {
-    const r = await fetch(
-        "Assets/Dictionnaires/mots_filtrés_sans_doublons.json"
-    );
+    const r = await fetch(_URLLISTEMOTS_);
     listeMots = await r.json();
     const mots = listeMots[`${tailleMot}_lettres`];
     console.log(`Nombre de mots de ${tailleMot} lettres :`, mots.length);
@@ -130,9 +170,8 @@ async function chargerMots() {
     }else {
         defMotSecret = mots[randomIndex][1];
     }
-    //? Affiche le mot secret dans la console
-    console.log(`Le mot secret est : ${motSecret}
-        Sa définition : ${defMotSecret}`);
+    
+    // console.log(`Le mot secret est : ${motSecret}, Définition : ${defMotSecret}`);
 }
 
 function creerGrille() {
@@ -250,7 +289,6 @@ function validerMot() {
     }
     // Vérifie si le mot est dans la liste des mots valides
     const motNormalise = normaliser(motJoueur);
-    console.log("Mot normalisé du joueur :", motNormalise);
     const listeNormalisee = listeMots[`${tailleMot}_lettres`].map((m) =>
         normaliser(m[0])
     );
@@ -327,14 +365,19 @@ function colorerLigne(motJoueur) {
         if (colors[i] === "correct") {
             key.classList.remove("present", "absent");
             key.classList.add("correct");
-            key.disabled = false;
+            if (dificulte) {
+                key.disabled = false;
+            }
+            
         }
         else if (colors[i] === "present") {
             if (!key.classList.contains("correct")) {
                 key.classList.remove("absent");
                 key.classList.add("present");
             }
-            key.disabled = false;
+            if (dificulte) {
+                key.disabled = false;
+            }
         }
         else if (colors[i] === "absent") {
 
@@ -345,7 +388,9 @@ function colorerLigne(motJoueur) {
 
             if (!stillUseful) {
                 key.classList.add("absent");
-                key.disabled = true;
+                if (dificulte) {
+                    key.disabled = true;
+                }
             }
         }
     }
