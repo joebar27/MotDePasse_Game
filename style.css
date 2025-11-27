@@ -8,6 +8,9 @@
     --muted: #9aa6b2;
     --text: #e6edf3;
     --accent: #58a6ff;
+    --present: #facc15;
+    --absent: #6b7280;
+    --correct: #3b82f6;
 }
 * {
     box-sizing: border-box;
@@ -63,7 +66,7 @@ header {
 #confirmMdP {
     display: none;
     margin: 0 5px;
-    color: #3b82f6;
+    color: var(--accent);
 }
 #mdpWord {
     display: none;
@@ -73,6 +76,11 @@ header {
 .attention {
     color: #fbbf24;
     font-size: 20px;
+}
+.info {
+    font-size: 16px;
+    cursor: help;
+    color: var(--accent);
 }
 /* ? --------------------------------------
        ? |      Burger styles Mobiles         |
@@ -245,15 +253,15 @@ main {
     height: 40px;
 }
 .correct {
-    background-color: #3b82f6 !important; /* bleu */
+    background-color: var(--correct) !important; /* bleu */
 }
 
 .present {
-    background-color: #facc15 !important; /* jaune */
+    background-color: var(--present) !important; /* jaune */
 }
 
 .absent {
-    background-color: #6b7280 !important; /* gris */
+    background-color: var(--absent) !important; /* gris */
 }
 
 .case.focus {

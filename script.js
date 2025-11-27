@@ -1,7 +1,9 @@
 let tailleMot = 5; // Modifier cette valeur pour changer la taille du mot à deviner (entre 5 et 6)
 let nombreEssais = 6; // Modifier cette valeur pour changer le nombre d'essais (entre 5 et 7)
 let triche = false; // Mettre à true pour afficher le mot secret dans la console
+let indexMotSecret = 0;
 let motSecret = "";
+let defMotSecret = "";
 let ligneActuelle = 0;
 let positionLettre = 0;
 let listeMots = {};
@@ -95,6 +97,7 @@ function gameInit() {
 }
 
 function normaliser(texte) {
+    console.log("Normalisation de :", texte);
     return texte
         .normalize("NFD") // Décompose les caractères accentués
         .replace(/[\u0300-\u036f]/g, "") // Supprime les accents
@@ -115,11 +118,21 @@ async function chargerMots() {
     );
     listeMots = await r.json();
     const mots = listeMots[`${tailleMot}_lettres`];
-    motSecret = mots[Math.floor(Math.random() * mots.length)].toUpperCase();
-
-    // if (triche) {
-    //     console.log("Mot secret :", motSecret);
-    // }
+    console.log(`Nombre de mots de ${tailleMot} lettres :`, mots.length);
+    // Choisit un mot secret aléatoire
+    const randomIndex = Math.floor(Math.random() * mots.length);
+    // Definie le mot secret en majuscules pour la partie
+    motSecret = mots[randomIndex][0].toUpperCase();
+    indexMotSecret = randomIndex;
+    // Récupère la définition du mot secret
+    if (mots[randomIndex][1] === "") {
+        defMotSecret = "Non disponible."
+    }else {
+        defMotSecret = mots[randomIndex][1];
+    }
+    //? Affiche le mot secret dans la console
+    console.log(`Le mot secret est : ${motSecret}
+        Sa définition : ${defMotSecret}`);
 }
 
 function creerGrille() {
@@ -237,8 +250,9 @@ function validerMot() {
     }
     // Vérifie si le mot est dans la liste des mots valides
     const motNormalise = normaliser(motJoueur);
+    console.log("Mot normalisé du joueur :", motNormalise);
     const listeNormalisee = listeMots[`${tailleMot}_lettres`].map((m) =>
-        normaliser(m)
+        normaliser(m[0])
     );
     // Si le mot n'est pas valide, secoue la ligne
     if (!listeNormalisee.includes(motNormalise)) {
@@ -250,7 +264,7 @@ function validerMot() {
     colorerLigne(motJoueur);
     // Vérifie si le mot est correct
     if (normaliser(motJoueur) === normaliser(motSecret)) {
-        setTimeout(() => alert(`Bravo ! Le mot était : ${motSecret}`), 300);
+        setTimeout(() => alert(`Bravo ! Le mot était : ${motSecret}\nDéfinition :\n${defMotSecret}`), 300);
         setTimeout(() => gameInit(), 1000);
         return;
     }
@@ -260,7 +274,7 @@ function validerMot() {
     mettreEnSurbrillanceCurseur();
     // Vérifie si le joueur a épuisé tous ses essais
     if (ligneActuelle === nombreEssais) {
-        setTimeout(() => alert(`Perdu ! Le mot était : ${motSecret}`), 300);
+        setTimeout(() => alert(`Perdu ! Le mot était : ${motSecret}\nDéfinition :\n${defMotSecret}`), 300);
         setTimeout(() => gameInit(), 1000);
         
     }
